@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-export default function Home() {
+export default function DuelLinks() {
   const [allCards, setAllCards] = useState([]);
 
   const [searchedArchetypeName, setSearchedArchetypeName] = useState("");
@@ -18,7 +18,7 @@ export default function Home() {
   async function getEveryCards() {
     try {
       const response = await fetch(
-        `https://db.ygoprodeck.com/api/v7/cardinfo.php`,
+        `https://db.ygoprodeck.com/api/v7/cardinfo.php?format=duel links`,
       );
       if (!response.ok) {
         throw new Error(`An error has occurred`);
@@ -36,7 +36,7 @@ export default function Home() {
   async function getSearchedArchetypeCards() {
     try {
       const response = await fetch(
-        `https://db.ygoprodeck.com/api/v7/cardinfo.php?archetype=${searchedArchetypeName}`,
+        `https://db.ygoprodeck.com/api/v7/cardinfo.php?format=duel links&archetype=${searchedArchetypeName}`,
       );
       if (!response.ok) {
         throw new Error(`An error has occurred`);
@@ -54,7 +54,7 @@ export default function Home() {
   async function getSearchedCards() {
     try {
       const response = await fetch(
-        `https://db.ygoprodeck.com/api/v7/cardinfo.php?fname=${searchedCardName}`,
+        `https://db.ygoprodeck.com/api/v7/cardinfo.php?format=duel links&fname=${searchedCardName}`,
       );
       if (!response.ok) {
         throw new Error(`An error has occurred`);
@@ -81,6 +81,7 @@ export default function Home() {
           const cardData = {
             id: card.id,
             image: card.card_images?.[0]?.image_url || "",
+            desc: card.desc,
             name: card.name,
             type: card.frameType,
             race: card.race,
@@ -89,7 +90,7 @@ export default function Home() {
             archetype: card.archetype || "None",
           };
 
-          const res = await fetch("/api/cards", {
+          const res = await fetch("/api/duel-links", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -165,7 +166,7 @@ export default function Home() {
   return (
     <div className=" flex flex-col text-white items-center gap-5">
       <h1 className=" mt-5 text-3xl font-extrabold">
-        Duel Nexus DB Management
+        Duel Nexus DB Management - DUEL LINKS
       </h1>
 
       {message && (
@@ -221,14 +222,6 @@ export default function Home() {
           Store
         </button>
       </form>
-
-      <Link
-        className=" text-red-700 text-lg font-bold hover:translate-x-2 duration-200"
-        target="_blank"
-        href={"/duel-links"}
-      >
-        Duel Links
-      </Link>
     </div>
   );
 }
